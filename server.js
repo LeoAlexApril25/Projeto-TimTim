@@ -1,0 +1,53 @@
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const app = express();
+const db = require('./src/config/db');
+const ingredientRoutes = require('./src/routes/ingredientRoutes');
+const productRoutes = require('./src/routes/productRoutes');
+const recipeRoutes = require('./src/routes/recipeRoutes');
+const productionRoutes = require('./src/routes/productionRoutes');
+const saleRoutes = require('./src/routes/saleRoutes');
+const reportRoutes = require('./src/routes/reportRoutes');
+const expenseRoutes = require('./src/routes/expenseRoutes');
+
+app.use(cors());
+app.use(express.json());
+
+app.use('/api/ingredients', ingredientRoutes); //Diz ao servidor para usar as rotas de ingredientes no caminho /api/ingredients
+
+app.use('/api/products', productRoutes);
+
+app.use('/api/recipes', recipeRoutes);
+
+app.use('/api/productions', productionRoutes);
+
+app.use('/api/sales', saleRoutes);
+
+app.use('/api/reports', reportRoutes);
+
+app.use('/api/expenses', expenseRoutes);
+
+app.get('/teste-banco', async (req, res) =>{
+    try{
+        const [rows] = await db.query('SELECT 1 + 1 AS resultado');
+        res.json({ mensagem: "Conexão com o banco OK!", resultado: rows[0].resultado});
+    } catch (err) {
+        console.error("❌ ERRO NO BANCO:", err);
+        res.status(500).json({ erro: "Erro ao conectar no banco", detalhes: err.message});
+
+    }
+});
+
+// Adicione temporariamente este teste no seu server.js, logo abaixo do app.get('/teste-banco')
+app.get('/verificar-tabelas', async (req, res) => {
+  try {
+    const [rows] = await db.query('SHOW TABLES');
+    res.json({ tabelas_no_banco: rows });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
+});
+
+
+app.listen(3000, ()=> console.log('Servidor rodando na porta 3000'));

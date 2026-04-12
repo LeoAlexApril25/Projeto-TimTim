@@ -1,0 +1,40 @@
+const db = require('../config/db');
+
+// Função para criar um novo ingrediente
+const create = async (req, res) => {
+    try{
+        const{ name, unit, cost_per_unit} = req.body;
+
+        // Comando SQL para inserir no banco
+        const [result] = await db.query(
+            'INSERT INTO ingredients (name, unit, cost_per_unit) VALUES (?, ?, ?)', [name,unit, cost_per_unit]
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Ingrediente cadastrado com sucesso!',
+            id: result.insertId
+        });
+    } catch (err){
+        res.status(500).json({ error: 'Erro ao salvar ingrediente', detalhes: err.message });
+    }
+};
+
+// Função para listar todos os ingredientes cadastrados
+const getAll = async (req, res) => {
+    try{
+         // Busca todos os ingredientes e ordena por nome
+        const [rows] = await db.query('SELECT * FROM ingredients ORDER BY name ASC');
+
+        res.json({
+            sucess: true,
+            data: rows //Aqui vem a lista de ingredientes do banco
+        });
+       
+    } catch(err){
+      res.status(500).json({ error: 'Erro ao buscar ingredientes', detalhes: err.message });
+    }
+};
+
+
+module.exports = { create, getAll };
