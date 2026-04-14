@@ -6,6 +6,9 @@
   "scripts": {
     "test": "jest --testPathPatterns=tests --forceExit"
   },
+  "jest": {
+    "testMatch": ["**/tests/**/*.test.js"]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LeoAlexApril25/Projeto-TimTim.git"
