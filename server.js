@@ -12,7 +12,7 @@ const reportRoutes = require('./src/routes/reportRoutes');
 const expenseRoutes = require('./src/routes/expenseRoutes');
 const goalRoutes = require('./src/routes/goalRoutes');
 const logger = require('./src/middlewares/logger'); 
-
+const authRoutes =  require('./src/routes/authRoutes');
 
 
 app.use(cors());
@@ -34,6 +34,8 @@ app.use('/api/reports', reportRoutes);
 app.use('/api/expenses', expenseRoutes);
 
 app.use('/api/goals', goalRoutes);
+
+app.use('/api/auth', authRoutes);
 
 
 
