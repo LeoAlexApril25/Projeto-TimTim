@@ -83,7 +83,7 @@ const forgotPassord = async (req, res) => {
             text:` Você solicitou a troca de senha.Clique no link para redefinir: ${resetUrl}`
         });
           
-          res.json({ success: true,message: 'E-mail de recuperação enviado!'});
+            res.json({ success: true,message: 'E-mail de   recuperação enviado!'});
         }catch(err){
             res.status(500).json({ error: 'Erro ao processar', detalhes: err.message})
         }
@@ -119,4 +119,4 @@ const resetPassword = async (req, res) => {
     }
 }
 
-module.exports = { register, login};
+module.exports = { register, login, forgotPassord, resetPassword};
