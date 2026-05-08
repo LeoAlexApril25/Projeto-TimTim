@@ -9,6 +9,14 @@ const validateExpense = (req, res, next) =>{
     next();
 };
 
+const validateCustomer = (req, res, next) => {
+    const { name } = req.body;
+    if(!name) {
+        return res.status(400).json({ error: 'O nome do cliente é obrigatório' });
+    }
+    next();
+};
+
 //Evita que no frontend o Timtim não mande em campos vazios
 
-module.exports = {validateExpense};
+module.exports = {validateExpense, validateCustomer};

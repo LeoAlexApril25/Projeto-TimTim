@@ -11,8 +11,7 @@ const register = async (req, res) => {
 
 
         // 1.Criptografar a senha
-        const salt = await bcrypt.getSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // 2. Salvar no banco de dados
         const [result] = await db.query(
@@ -41,7 +40,7 @@ const login = async (req, res) => {
         if (!isMatch) return res.status(401).json({ error: 'E-mail ou senha incorretos'})
 
         // 3. Gerar Token senha
-        const token = jwt.sign({ id: users.id}, process.env.JWT_SECRET, { expireIn: '1d'});
+        const token = jwt.sign({ id: users.id}, process.env.JWT_SECRET, { expiresIn: '1d'});
 
         res.json({ sucess:true, token, user: {id: user.id, name: user.name, email: user.name}}); 
     } catch(err) {
@@ -60,7 +59,7 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-const forgotPassord = async (req, res) => {
+const forgotPassword = async (req, res) => {
     try{
         const { email } = req.body;
         const [user] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
@@ -119,4 +118,4 @@ const resetPassword = async (req, res) => {
     }
 }
 
-module.exports = { register, login, forgotPassord, resetPassword};
+module.exports = { register, login, forgotPassword, resetPassword};

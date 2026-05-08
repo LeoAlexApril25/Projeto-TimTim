@@ -33,7 +33,7 @@ O backend do TimTim foi construído para gerenciar todo o ciclo de vida de uma c
 
 🚀 Jornada de Desenvolvimento (Timeline)
 
-📅 Fase 1: Fundação e Estrutura (Maio/2026)
+📅 Fase 1: Fundação e Estrutura (Abril/2026)
 
 •
 Configuração do Ambiente: Inicialização do Node.js, Express e conexão com banco de dados MySQL.
@@ -47,7 +47,7 @@ Módulo de Produtos: Cadastro de produtos finais com definição de preços de v
 •
 Ficha Técnica (Receitas): Implementação da lógica que vincula ingredientes a produtos, calculando o custo de produção automaticamente.
 
-📅 Fase 2: Operação e Inteligência (Maio/2026)
+📅 Fase 2: Operação e Inteligência (Abril/2026)
 
 •
 Módulo de Produção: Registro diário de fabricação de doces.
