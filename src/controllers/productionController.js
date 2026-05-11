@@ -2,25 +2,42 @@ const db = require('../config/db');
 
 
 const create = async (req, res) => {
+  const connection = await db.getConnection(); //Usamos transação para segurança
     try{
-        const { product_id, quantity, production_date} = req.body;
+        await connection.beginTransaction();
+        const { product_id, quantity, production_date } = req.body;
 
-        const [result] = await db.query (
-            'INSERT INTO productions (product_id, quantity,    production_date) VALUES (?,?,?)',[
-            product_id, quantity, production_date]
+        // 1. Registrar a Produção
+        const [result] = await connection.query(
+            'INSERT INTO productions (product_id, quantity, production_date) VALUES (?,?,?',
+            [product_id, quantity, production_date]
         );
 
-        res.status(201).json({
-            sucess: true,
-            message: 'Produção registrada com sucesso!',
-            id: result.insertId
-        });
+        // 2. Buscar os ingredientes da receita desde produto
+        const [ recipeItems] = await connection.query(
+            'SELECT ingredient_id, quantity AS qty_per_unit FROM recipe_items WHERE product_id = ?',
+            [totalUsed, addItem.ingredient_id]
+        );
 
-    }catch(err){
-        res.status(500).json({ error:
-            'Erro ao registrar produção', 
-             detalhes: err.message
-        });
+        // 3. Dar baixa no estoque de cada ingrediente
+        for (const item of recipeItems){
+            const totalUsed = item.qty_per_unit * quantity;
+            await connection.query(
+                'UPDATE ingredient SET stock_quantity = stock_quantity - ? WHERE id = ?',
+                [totalUsed, item.ingredient_id]
+            );
+
+        }
+
+        await connection.commit();
+        res.status(201).json({ sucess: true, message: 'Produção registrada e estoque atualizado!'})
+
+    } catch(err){
+        await connection.rollback();
+        res.status(500).json({ error: 'Erro ao processar produção', detalhes: err.message});
+
+    } finally {
+        connection.release();
     }
 };
 

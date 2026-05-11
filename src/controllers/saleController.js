@@ -24,15 +24,25 @@ const create = async (req, res) => {
 const getAll = async (req, res) => {
     try{
         const [rows] = await db.query(`
-            SELECT s.id, p.name AS product_name, s.quantity, s.sale_date FROM sales s JOIN products p ON s.product_id = p.id ORDER BY s.sale_date DESC`
-        );
+            SELECT s.id,
+                p.name AS product_name,
+                c.name AS customer_name,
+                s.quantity,
+                s.sale_date,
+            FROM sales s
+            JOIN products p ON s.product_id = p.id
+            LEFT JOIN customers c ON s.customer_id = c.id
+            ORDER BY s.sale_date DESC`);
 
-        res.json(rows);
-    }catch(err){
-        res.status(500).json({ 
-            error: 'Erro ao listar vendas', detalhes: err.message });
+            res.json(rows);
+    } catch (err) {
+        res.status(500).json({
+            error: 'Erro ao listar vendas', detalhes: err.message
+        });
     }
-}
+};
+
+
 
 
 
