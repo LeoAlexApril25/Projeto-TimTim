@@ -9,7 +9,7 @@ const create = async (req, res) => {
         );
 
         res.status(201).json({
-            sucess: true,
+            success: true,
             message: 'Venda registrada com sucesso!',
             id: result.insertId
         });

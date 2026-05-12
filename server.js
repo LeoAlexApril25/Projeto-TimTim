@@ -15,6 +15,8 @@ const logger = require('./src/middlewares/logger');
 const authRoutes =  require('./src/routes/authRoutes');
 const customerRoutes = require('./src/routes/customerRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
+const deliveryRoutes = require('./src/routes/deliveryRoutes');
+
 
 
 app.use(cors());
@@ -42,6 +44,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/customers', customerRoutes);
 
 app.use('/api/dashboard', dashboardRoutes);
+
+app.use('/api/deliveries', deliveryRoutes);
 
 app.get('/teste-banco', async (req, res) =>{
     try{

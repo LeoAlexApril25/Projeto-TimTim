@@ -15,7 +15,7 @@ const addItem = async (req, res) => {
         );
 
         res.status(201).json({
-            sucess: true,
+            success: true,
             message: 'Item adicionado à receita com sucesso!',
             id: result.insertId
         });

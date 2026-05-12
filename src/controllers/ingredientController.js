@@ -27,7 +27,7 @@ const getAll = async (req, res) => {
         const [rows] = await db.query('SELECT * FROM ingredients ORDER BY name ASC');
 
         res.json({
-            sucess: true,
+            success: true,
             data: rows //Aqui vem a lista de ingredientes do banco
         });
        

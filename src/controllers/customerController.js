@@ -7,7 +7,7 @@ const create = async (req, res) => {
             'INSERT INTO customers (name, phone, email, adress) VALUES (?,?,?,?)',[name, phone, email,
                 adress]
         );
-        res.status(201).json({ succcess: true, id: result.insertId, message: 'Cliente criado com sucesso' });
+        res.status(201).json({ success: true, id: result.insertId, message: 'Cliente criado com sucesso' });
     } catch (err){
         res.status(500).json({ error: 'Erro ao criar cliente', detalhes: err.message });
     }

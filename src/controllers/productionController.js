@@ -31,7 +31,7 @@ const create = async (req, res) => {
         }
 
         await connection.commit();
-        res.status(201).json({ sucess: true, message: 'Produção registrada e estoque atualizado!'})
+        res.status(201).json({ success: true, message: 'Produção registrada e estoque atualizado!'})
 
     } catch(err){
         await connection.rollback();
