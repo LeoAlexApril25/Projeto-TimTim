@@ -9,23 +9,24 @@ const create = async (req, res) => {
 
         // 1. Registrar a Produção
         const [result] = await connection.query(
-            'INSERT INTO productions (product_id, quantity, production_date) VALUES (?,?,?',
+            'INSERT INTO productions (product_id, quantity, production_date) VALUES (?,?,?)',
             [product_id, quantity, production_date]
         );
 
         // 2. Buscar os ingredientes da receita desde produto
-        const [ recipeItems] = await connection.query(
-            'SELECT ingredient_id, quantity AS qty_per_unit FROM recipe_items WHERE product_id = ?',
-            [totalUsed, addItem.ingredient_id]
-        );
+        const [recipeItems] = await connection.query(
+            'SELECT ingredient_id, quantity AS qty_per_unit   FROM recipe_items WHERE product_id = ?',
+            [product_id]
+);
 
         // 3. Dar baixa no estoque de cada ingrediente
         for (const item of recipeItems){
             const totalUsed = item.qty_per_unit * quantity;
             await connection.query(
-                'UPDATE ingredient SET stock_quantity = stock_quantity - ? WHERE id = ?',
-                [totalUsed, item.ingredient_id]
-            );
+            'UPDATE ingredients SET stock_quantity = stock_quantity - ? WHERE id = ?',
+            [totalUsed, item.ingredient_id]
+);
+
 
         }
 

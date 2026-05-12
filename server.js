@@ -14,6 +14,7 @@ const goalRoutes = require('./src/routes/goalRoutes');
 const logger = require('./src/middlewares/logger'); 
 const authRoutes =  require('./src/routes/authRoutes');
 const customerRoutes = require('./src/routes/customerRoutes');
+const dashboardRoutes = require('./src/routes/dashboardRoutes');
 
 
 app.use(cors());
@@ -39,6 +40,8 @@ app.use('/api/goals', goalRoutes);
 app.use('/api/auth', authRoutes);
 
 app.use('/api/customers', customerRoutes);
+
+app.use('/api/dashboard', dashboardRoutes);
 
 app.get('/teste-banco', async (req, res) =>{
     try{

@@ -10,16 +10,16 @@ O TimTim é uma solução robusta de backend desenvolvida para transformar a ges
 👥 Equipe de Desenvolvimento
 
 •
-Leonardo (Equipe do Projeto )
+Leonardo (Membro do Projeto )
 
 •
-Kennedy (Equipe do  Projeto)
+Kennedy (Membro do  Projeto)
 
 •
 Leandro (Líder da equipe)
 
 •
-Wesley João(Equipe do Projeto)
+Wesley João(Membro do Projeto)
 
 
 
@@ -96,5 +96,5 @@ Segurança: Bcryptjs, JSON Web Token (JWT)
 Comunicação: Nodemailer
 
 •
-Ferramentas: DBeaver, Thunder Client, Git
+Ferramentas: MySQL, Thunder Client, Git
 
