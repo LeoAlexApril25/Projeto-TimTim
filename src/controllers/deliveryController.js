@@ -23,7 +23,7 @@ const getDeliveries = async(req, res) => {
             JOIN customers c ON d.customer_id = c.id
             JOIN productions pr ON d.productions_id = pr.id
             JOIN products p ON pr.product_id = .id
-            ORDER BT d.scheduled_at DESC
+            ORDER BY d.scheduled_at DESC
             `);
         res.json(deliveries);
             

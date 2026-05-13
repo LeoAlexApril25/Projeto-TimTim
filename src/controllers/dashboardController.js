@@ -32,7 +32,7 @@ const getSummary = async (req, res ) => {
         );
 
      // 5. Histórico de 7 dias para o Gráfico (Ponto 7)
-     const [weekyHistory] = awaitdb.query(`
+     const [weeklyHistory] = awaitdb.query(`
         SELECT DATE(sale_date) AS date, 
         SUM(quantity) AS sales 
         FROM sales WHERE sale_date >= DATE_SUB_DATE(), 
@@ -46,7 +46,7 @@ const getSummary = async (req, res ) => {
         sales_goal: salesGoal,
         production_today: ProductionToday,
         low_stock_alerts: lowStock,
-        week_history: weekyHistory
+        week_history: weeklyHistory
     });
 
     } catch(err){
@@ -59,13 +59,13 @@ const getSummary = async (req, res ) => {
 const getActivities = async(req, res) => {
     try{
         const [activities] = await db.query(`
-            SELECT \'Venda\' as type, s.sale_date as date, p.name as item, s.quantity, s.total_price as value
+            SELECT 'Venda' as type, s.sale_date as date, p.name as item, s.quantity, s.total_price as value
             FROM sales s JOIN products p ON s.product_id = p.id
             UNION ALL
-            SELECT \'Produção\' as type, pr.production_date as date, p.name as item, pr.quantity, NULL as value
+            SELECT 'Produção' as type, pr.production_date as date, p.name as item, pr.quantity, NULL as value
             FROM productions pr JOIN products p ON pr.product_id = p.id
             UNION ALL
-            SELECT \'Despesa\' as type, e.expense_date as date, e.description as item, NULL as quantity, e.amount as value
+            SELECT 'Despesa' as type, e.expense_date as date, e.description as item, NULL as quantity, e.amount as value
             FROM expenses e
             ORDER BY date DESC
             LIMIT 10

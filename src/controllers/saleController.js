@@ -28,7 +28,7 @@ const getAll = async (req, res) => {
                 p.name AS product_name,
                 c.name AS customer_name,
                 s.quantity,
-                s.sale_date,
+                s.sale_date
             FROM sales s
             JOIN products p ON s.product_id = p.id
             LEFT JOIN customers c ON s.customer_id = c.id
