@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const saleController = require('../controllers/saleController');
 
+
+Router.GET('/stats', saleController.getStats);
+
 // Rota para criar uma venda (POST)
 router.post('/',saleController.create);
 
