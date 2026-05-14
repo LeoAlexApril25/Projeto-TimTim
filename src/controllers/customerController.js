@@ -1,10 +1,11 @@
 const db = require('../config/db');
+const { get } = require('../routes/saleRoutes');
 
 const create = async (req, res) => {
     try{
-        const { name, phone, email, adress} = req.body;
+        const { name, phone, email, address} = req.body;
         const [result] = await db.query(
-            'INSERT INTO customers (name, phone, email, adress) VALUES (?,?,?,?)',[name, phone, email,
+            'INSERT INTO customers (name, phone, email, address) VALUES (?,?,?,?)',[name, phone, email,
                 adress]
         );
         res.status(201).json({ success: true, id: result.insertId, message: 'Cliente criado com sucesso' });
@@ -15,7 +16,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try{
-        const [rows] = await db.query('SELECT * FROM customers ORDER BY name ASC');
+        const [rows] = await db.query('SELECT id, name, phone, email, status, balance, created_at FROM customers ORDER BY name ASC');
         res.json(rows);
 
     } catch (err){
@@ -24,4 +25,49 @@ const getAll = async (req, res) => {
     }
 };
 
-module.exports = { create, getAll};
+const getSummary = async (req, res) => {
+    const [[{ saldo_devedor }]] = await db.query('SELECT SUM(balance) AS saldo_devedor FROM customers WHERE balance > 0');
+    
+    const [[{ encomendas_ativas }]] = await db.query(
+        `SELECT COUNT(*) AS encomendas_ativas FROM sales
+         WHERE status = 'ativo'`);
+
+    res.json({ saldo_devedor, encomendas_ativas})
+};
+
+const getDefaulters = async (req, res) => {
+    const [rows] = await db.query(
+        `SELECT id, name, balance,
+           DATEDIFF (NOW(), updated_at) AS dias_atraso
+        FROM customers
+        WHERE status = 'em_debito' AND balance > 0
+        ORDER BY dias_atraso DESC`);
+    res.json(rows)
+}
+
+const getActiveOrders = async (Req, res) => {
+    const [rows] = await db.query (
+        `SELECT s.id, p.name AS product_name, c.name AS customer_name,
+           s.status, s.sale_date
+         FROM sale s
+         JOIN products p ON s.product_id = p.id
+         JOIN customers c ON s.customer_id = c.id
+         WHERE s.status = 'ativo'
+         ORDER BY s.sale_date DESC
+         `);
+    res.json(rows);
+}
+
+const search = async (req, res) => {
+    const { q } = req.query;
+    const [ rows ] = awaitdb.query(
+        `SELECT id, name, phone, email, status, balance
+         FROM customers
+         WHERE name LIKE? OR phone LIKE ?
+         ORDER BY name ASC`,
+         [`%${q}%`, `%${q}%`]
+    );
+    res.json(rows);
+}
+
+module.exports = { create, getAll, getSummary, getDefaulters, getActiveOrders, search};
