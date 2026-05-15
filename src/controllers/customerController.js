@@ -6,7 +6,7 @@ const create = async (req, res) => {
         const { name, phone, email, address} = req.body;
         const [result] = await db.query(
             'INSERT INTO customers (name, phone, email, address) VALUES (?,?,?,?)',[name, phone, email,
-                adress]
+                address]
         );
         res.status(201).json({ success: true, id: result.insertId, message: 'Cliente criado com sucesso' });
     } catch (err){
@@ -49,7 +49,7 @@ const getActiveOrders = async (Req, res) => {
     const [rows] = await db.query (
         `SELECT s.id, p.name AS product_name, c.name AS customer_name,
            s.status, s.sale_date
-         FROM sale s
+         FROM sales s
          JOIN products p ON s.product_id = p.id
          JOIN customers c ON s.customer_id = c.id
          WHERE s.status = 'ativo'

@@ -37,7 +37,7 @@ const getAll = async (req, res) => {
 };
 
 const checkPriceIncrease = async(id, newPrice) => {
-    const [oldData] = await db.query('SELECT coost_per_unit FROM ingredients WHERE id = ?', [id]);
+    const [oldData] = await db.query('SELECT cost_per_unit FROM ingredients WHERE id = ?', [id]);
     if (oldData.length > 0 && newPrice > oldData[0].cost_per_unit){
         await db.query('INSERT INTO price_history (ingredient_id, old_price, new_price) VALUES(?,?,?)',
             [id, oldData[0].cost_per_unit, newPrice]);
