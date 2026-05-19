@@ -26,13 +26,34 @@ const getAll = async (req, res) => {
 };
 
 const getSummary = async (req, res) => {
+
     const [[{ saldo_devedor }]] = await db.query('SELECT SUM(balance) AS saldo_devedor FROM customers WHERE balance > 0');
     
-    const [[{ encomendas_ativas }]] = await db.query(
+    const [[{ encomendas_ativas_count }]] = await db.query(
         `SELECT COUNT(*) AS encomendas_ativas FROM sales
          WHERE status = 'ativo'`);
 
-    res.json({ saldo_devedor, encomendas_ativas})
+    const [clientes_recentes] = await db.query(
+        "SELECT id, name, status, created_at FROM customers ORDER BY created_at DESC LIMIT 5"
+    );
+
+    const [cobrancas_urgentes] = await db.query(
+        "SELECT id, name, status, DATEDIFF(CURRENT_DATE(), created_at) as dias_atraso FROM customers WHERE status = 'EM DÉBITO' ORDER BY created_at ASC"
+    );
+
+    const [encomendas_ativas] = await db.query(
+        `
+            SELECT d.id, c.name as destinatario, p.name as produto, p.photo_url, d.status, d.scheduled_at
+            FROM deliveries d
+            JOIN customers c ON d.customer_id = c.id
+            JOIN productions pr ON d.production_id = pr.id
+            JOIN products p ON pr.product_id = p.id
+            WHERE d.status != 'Entregue'
+            ORDER BY d.scheduled_at ASC
+        `
+    );
+
+    res.json({success: true, data: { saldo_devedor, encomendas_ativas_count, clientes_recentes, cobrancas_urgentes, encomendas_ativas }});
 };
 
 const getDefaulters = async (req, res) => {
@@ -55,12 +76,15 @@ const getActiveOrders = async (Req, res) => {
          WHERE s.status = 'ativo'
          ORDER BY s.sale_date DESC
          `);
+
     res.json(rows);
+
+
 }
 
 const search = async (req, res) => {
     const { q } = req.query;
-    const [ rows ] = awaitdb.query(
+    const [ rows ] = await db.query(
         `SELECT id, name, phone, email, status, balance
          FROM customers
          WHERE name LIKE? OR phone LIKE ?

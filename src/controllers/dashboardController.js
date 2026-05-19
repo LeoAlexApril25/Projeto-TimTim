@@ -20,7 +20,7 @@ const getSummary = async (req, res ) => {
       //3. Produção do Dia por Produto (Ponto 3 e 10)
       const [ProductionToday] = await db.query(`
         SELECT p.name, SUM(pr.quantity) AS total
-        FROM productions pr JOIN productions p ON pr.product_id = p.id
+        FROM productions pr JOIN products p ON pr.product_id = p.id
         WHERE DATE(pr.production_date) = CURRENT_DATE() GROUP BY p.id`
        );
 
@@ -32,11 +32,10 @@ const getSummary = async (req, res ) => {
         );
 
      // 5. Histórico de 7 dias para o Gráfico (Ponto 7)
-     const [weeklyHistory] = awaitdb.query(`
+     const [weeklyHistory] = await db.query(`
         SELECT DATE(sale_date) AS date, 
         SUM(quantity) AS sales 
-        FROM sales WHERE sale_date >= DATE_SUB_DATE(), 
-        INTERVAL 7 DAY) 
+        FROM sales WHERE sale_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) 
         GROUP BY DATE (sale_date) ORDER BY date ASC`
     );
 
