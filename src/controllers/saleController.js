@@ -5,7 +5,7 @@ const create = async (req, res) => {
         const { product_id, quantity, sale_date} = req.body;
 
         const [result] = await db.query (
-           'INSERT INTO sales ( product_id, quantity, sale_date, customer_id) VALUES (?,?,?)', 
+           'INSERT INTO sales ( product_id, quantity, sale_date, customer_id) VALUES (?,?,?.?)', 
            [product_id, quantity, sale_date || new Date(), customer_id || null]
         );
 
