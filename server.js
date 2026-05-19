@@ -16,6 +16,7 @@ const authRoutes =  require('./src/routes/authRoutes');
 const customerRoutes = require('./src/routes/customerRoutes');
 const dashboardRoutes = require('./src/routes/dashboardRoutes');
 const deliveryRoutes = require('./src/routes/deliveryRoutes');
+const financeRoutes = require('./src/routes/financeRoutes');
 
 
 
@@ -46,6 +47,8 @@ app.use('/api/customers', customerRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
 app.use('/api/deliveries', deliveryRoutes);
+
+app.use('/api/finance', financeRoutes);
 
 app.get('/teste-banco', async (req, res) =>{
     try{
